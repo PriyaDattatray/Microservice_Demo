@@ -1,0 +1,1 @@
+2021-09-20 10:16:01,842 DEBUG SqlStatementLogger:144 - [] select department0_.id as id1_0_, department0_.department_address as departme2_0_, department0_.department_code as departme3_0_, department0_.department_name as departme4_0_ from department_service department0_ where department0_.id=?

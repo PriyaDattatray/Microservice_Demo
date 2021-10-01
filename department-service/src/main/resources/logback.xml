@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property name="FOLDER_NAME" value="logs" />
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>
+				%date{ISO8601} %-5level %class{0}:%L - [%X] %msg%n
+			</Pattern>
+		</layout>
+	</appender>
+	<appender name="FILE-AUDIT"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${FOLDER_NAME}/debug.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>
+				%date{ISO8601} %-5level %class{0}:%L - [%X] %msg%n
+			</Pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			roll over daily
+			<fileNamePattern>${FOLDER_NAME}/archived/debug.%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+	</appender>
+	<appender name="FILE-ERROR"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${FOLDER_NAME}/error.log</file>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+        <level>error</level>
+        </filter>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>
+				%date{ISO8601} %-5level %class{0}:%L - [%X] %msg%n
+			</Pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			roll over daily
+			<fileNamePattern>${FOLDER_NAME}/archived/error.%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+	</appender>
+	
+	<!--  For warnings-->
+	<appender name="FILE-WARN"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${FOLDER_NAME}/warn.log</file>
+		
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>
+				%date{ISO8601} %-5level %class{0}:%L - [%X] %msg%n
+			</Pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			roll over daily
+			<fileNamePattern>${FOLDER_NAME}/archived/warn.%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+	</appender>
+	
+	<!-- For Database -->
+	
+	<appender name="FILE-HIBERNATE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${FOLDER_NAME}/database.log</file>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+        <level>DEBUG</level>
+        </filter>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>
+				%date{ISO8601} %-5level %class{0}:%L - [%X] %msg%n
+			</Pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			roll over daily
+			<fileNamePattern>${FOLDER_NAME}/archived/database.%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+	</appender>
+	
+	
+<!-- 	Send logs to both console and file audit-->
+	<logger name="com.demo.department.controller" level="debug"
+		additivity="false">
+		<appender-ref ref="FILE-AUDIT" />
+		<appender-ref ref="STDOUT" />
+	</logger>
+	
+	<logger name="com.demo.department.controllerr" level="warn"
+		additivity="false">
+		<appender-ref ref="FILE-WARN" />
+	</logger>
+	
+	<Logger name="org.hibernate.SQL" level="debug"  additivity="false">
+	<appender-ref ref="FILE-HIBERNATE" />
+	</Logger>
+	<root level="INFO">
+		<appender-ref ref="STDOUT" />
+	</root>
+	
+	
+	<root level="error">
+		<appender-ref ref="FILE-ERROR" />
+	</root>
+	<root level="warn">
+		<appender-ref ref="FILE-WARN" />
+	</root>
+</configuration>
